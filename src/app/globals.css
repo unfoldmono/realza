@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+:root {
+  --color-coral: #ff6b4a;
+  --color-coral-light: #fff0eb;
+  --color-cream: #fffbf7;
+  --color-green: #2e7d32;
+  --color-green-light: #e8f5e9;
+}
+
+body {
+  font-family: 'Outfit', system-ui, sans-serif;
+  background: var(--color-cream);
+}
+
+/* Custom utilities */
+.btn-primary {
+  @apply bg-[#ff6b4a] text-white px-6 py-3 rounded-full font-semibold transition-all hover:shadow-lg hover:-translate-y-0.5;
+  box-shadow: 0 4px 20px rgba(255, 107, 74, 0.3);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 8px 30px rgba(255, 107, 74, 0.4);
+}
+
+.btn-secondary {
+  @apply bg-white text-gray-800 px-6 py-3 rounded-full font-semibold border-2 border-gray-200 transition-all hover:border-[#ff6b4a] hover:text-[#ff6b4a];
+}
+
+.card {
+  @apply bg-white rounded-3xl p-6 shadow-sm;
+}
+
+.input {
+  @apply w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-[#ff6b4a] focus:outline-none transition-colors;
+}
+
+.badge {
+  @apply inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium;
+}
+
+.badge-coral {
+  @apply bg-[#fff0eb] text-[#ff6b4a];
+}
+
+.badge-green {
+  @apply bg-[#e8f5e9] text-[#2e7d32];
+}
