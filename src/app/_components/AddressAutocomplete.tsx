@@ -141,31 +141,26 @@ export default function AddressAutocomplete({
     }
   }, [isLoaded, handlePlaceSelect])
 
-  // If no API key, show regular input with a note
-  if (!apiKey) {
-    return (
-      <div>
-        <input
-          type="text"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder}
-          className={`input ${error ? 'border-red-300 focus:border-red-400' : ''} ${className}`}
-          autoComplete="street-address"
-        />
-        <p className="text-xs text-gray-400 mt-1">
-          💡 Tip: Add Google Places API key for address suggestions
-        </p>
-      </div>
-    )
-  }
-
-  // Sync external value changes to input (for when address is auto-filled)
+  // Sync external value changes to input (for when address is auto-filled by Google Places)
   useEffect(() => {
-    if (inputRef.current && value && inputRef.current.value !== value) {
+    if (inputRef.current && isLoaded && value && inputRef.current.value !== value) {
       inputRef.current.value = value
     }
-  }, [value])
+  }, [value, isLoaded])
+
+  // If no API key or not yet loaded, show regular controlled input
+  if (!apiKey || !isLoaded) {
+    return (
+      <input
+        type="text"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className={`input ${error ? 'border-red-300 focus:border-red-400' : ''} ${className}`}
+        autoComplete="street-address"
+      />
+    )
+  }
 
   return (
     <input
@@ -173,7 +168,7 @@ export default function AddressAutocomplete({
       type="text"
       defaultValue={value}
       onInput={(e) => onChange((e.target as HTMLInputElement).value)}
-      onBlur={(e) => onChange(e.target.value)} // Also sync on blur
+      onBlur={(e) => onChange(e.target.value)}
       placeholder={placeholder}
       className={`input ${error ? 'border-red-300 focus:border-red-400' : ''} ${className}`}
       autoComplete="off"
