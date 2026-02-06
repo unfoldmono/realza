@@ -190,7 +190,7 @@ export function ListingCardCompact({ listing }: { listing: MLSListing }) {
         <p className="text-sm text-gray-700 truncate">{listing.address}</p>
         <p className="text-xs text-gray-500">{listing.city}, {listing.state}</p>
         <Link
-          href={`/listing/${listing.id}`}
+          href={`/browse/${listing.id}`}
           className="mt-2 block w-full text-center bg-[#ff6b4a] text-white text-sm font-medium py-1.5 rounded-lg hover:bg-[#e85a3a] transition-colors"
         >
           View Details

@@ -75,7 +75,7 @@ export default function HomeSearch() {
           onFocus={() => setShowSuggestions(true)}
           onKeyDown={handleKeyDown}
           placeholder="Enter city, neighborhood, or ZIP"
-          className="w-full px-6 py-5 pl-14 text-lg rounded-full border-0 shadow-2xl focus:outline-none focus:ring-4 focus:ring-[#ff6b4a]/30 placeholder:text-gray-400"
+          className="w-full px-6 py-5 pl-14 text-lg rounded-full border-0 shadow-2xl focus:outline-none focus:ring-4 focus:ring-[#ff6b4a]/30 placeholder:text-gray-400 bg-white"
         />
         <svg 
           className="absolute left-5 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-400" 

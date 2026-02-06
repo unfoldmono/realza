@@ -208,7 +208,7 @@ export default function ListingsMap({
           <div class="popup-details">${listing.beds} bd • ${listing.baths} ba • ${listing.sqft.toLocaleString()} sqft</div>
           <div class="popup-address">${listing.address}</div>
           <div class="popup-city">${listing.city}, ${listing.state}</div>
-          <a href="/listing/${listing.id}" class="popup-link">View Details →</a>
+          <a href="/browse/${listing.id}" class="popup-link">View Details →</a>
         </div>
       </div>
     `
