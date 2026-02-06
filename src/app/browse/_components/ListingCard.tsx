@@ -50,7 +50,7 @@ export default function ListingCard({
 
   return (
     <Link
-      href={`/listing/${listing.id}`}
+      href={`/browse/${listing.id}`}
       className={`
         block bg-white rounded-2xl overflow-hidden transition-all duration-200
         ${isHovered || isSelected ? 'shadow-lg ring-2 ring-[#ff6b4a] scale-[1.02]' : 'shadow-sm hover:shadow-md'}
