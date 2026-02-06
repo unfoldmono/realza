@@ -1,11 +1,12 @@
 'use client'
 
 import Link from 'next/link'
-import { useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState, useCallback } from 'react'
 import type { DragEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import { uploadPhoto, deletePhoto } from '@/lib/actions/storage'
 import { createListing } from '@/lib/actions/listings'
+import AddressAutocomplete from '@/app/_components/AddressAutocomplete'
 
 type Step = 'address' | 'details' | 'description' | 'price' | 'photos' | 'review'
 
@@ -102,6 +103,25 @@ export default function NewListingClient() {
       })
     }
   }
+
+  const handleAddressSelect = useCallback((components: { address: string; city: string; state: string; zip: string }) => {
+    setForm((prev) => ({
+      ...prev,
+      address: components.address,
+      city: components.city,
+      state: components.state,
+      zip: components.zip,
+    }))
+    // Clear all address-related errors
+    setFieldErrors((prev) => {
+      const next = { ...prev }
+      delete next.address
+      delete next.city
+      delete next.state
+      delete next.zip
+      return next
+    })
+  }, [])
 
   const getAddressErrors = (): Record<string, string> => {
     const next: Record<string, string> = {}
@@ -376,12 +396,12 @@ export default function NewListingClient() {
             <div className="card space-y-5">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Street address</label>
-                <input
+                <AddressAutocomplete
                   value={form.address}
-                  onChange={(e) => setValue('address', e.target.value)}
-                  placeholder="1842 Palm Beach Rd"
-                  className={`input ${fieldErrors.address ? 'border-red-300 focus:border-red-400' : ''}`}
-                  autoComplete="street-address"
+                  onChange={(value) => setValue('address', value)}
+                  onSelect={handleAddressSelect}
+                  placeholder="Start typing your address..."
+                  error={!!fieldErrors.address}
                 />
                 <FieldError name="address" />
               </div>
@@ -608,13 +628,13 @@ export default function NewListingClient() {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Asking price</label>
                 <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl">$</span>
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 text-2xl font-bold pointer-events-none">$</span>
                   <input
                     value={form.price}
                     onChange={(e) => setValue('price', onlyDigits(e.target.value))}
                     placeholder={suggestedPrice ? String(suggestedPrice) : '425000'}
                     inputMode="numeric"
-                    className={`input pl-10 text-2xl font-bold ${
+                    className={`input pl-12 text-2xl font-bold ${
                       fieldErrors.price ? 'border-red-300 focus:border-red-400' : ''
                     }`}
                   />
@@ -646,7 +666,7 @@ export default function NewListingClient() {
               <input
                 ref={fileInputRef}
                 type="file"
-                accept="image/*"
+                accept=".jpg,.jpeg,.png,.heic,image/jpeg,image/png,image/heic"
                 multiple
                 className="hidden"
                 onChange={(e) => handleFilesSelected(e.target.files)}

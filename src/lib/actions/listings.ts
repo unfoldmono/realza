@@ -9,30 +9,33 @@ async function ensureProfile(supabase: Awaited<ReturnType<typeof createClient>>,
     .from('profiles')
     .select('id')
     .eq('id', user.id)
-    .single()
+    .maybeSingle() // Use maybeSingle instead of single to avoid error when not found
 
   if (profile) return { profile, error: null }
 
   // Profile doesn't exist - create one
-  if (fetchError?.code === 'PGRST116') {
-    const { data: newProfile, error: insertError } = await supabase
-      .from('profiles')
-      .insert({
-        id: user.id,
-        email: user.email || '',
-        full_name: user.email?.split('@')[0] || 'Seller',
-        user_type: 'seller',
-      })
-      .select()
-      .single()
+  // Try upsert to handle race conditions
+  const { data: newProfile, error: insertError } = await supabase
+    .from('profiles')
+    .upsert({
+      id: user.id,
+      email: user.email || '',
+      full_name: user.email?.split('@')[0] || 'Seller',
+      user_type: 'seller',
+    }, { onConflict: 'id' })
+    .select()
+    .single()
 
-    if (insertError) {
-      return { profile: null, error: `Failed to create profile: ${insertError.message}` }
-    }
-    return { profile: newProfile, error: null }
+  if (insertError) {
+    console.error('Profile upsert error:', insertError)
+    return { profile: null, error: `Failed to create profile: ${insertError.message} (code: ${insertError.code})` }
   }
-
-  return { profile: null, error: fetchError?.message || 'Failed to verify profile' }
+  
+  if (!newProfile) {
+    return { profile: null, error: 'Profile creation returned no data' }
+  }
+  
+  return { profile: newProfile, error: null }
 }
 
 export async function createListing(data: {
