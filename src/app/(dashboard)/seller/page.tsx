@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
+import { UserDropdown } from '@/app/_components/UserDropdown'
 
 export const runtime = 'nodejs'
 
@@ -84,9 +85,7 @@ export default async function SellerDashboard() {
             </Link>
           </div>
           <div className="flex items-center gap-4">
-            <div className="w-10 h-10 bg-[#ff6b4a] rounded-full flex items-center justify-center text-white font-semibold">
-              {firstName.charAt(0).toUpperCase()}
-            </div>
+            <UserDropdown userName={profile?.full_name || firstName} />
           </div>
         </div>
       </header>

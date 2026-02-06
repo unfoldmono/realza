@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { AgentHeader } from '@/app/agent/_components/AgentHeader'
+import { getProfile } from '@/lib/actions/auth'
 
 export const runtime = 'nodejs'
 
@@ -32,20 +33,11 @@ export default async function AgentListingsPage() {
     .eq('status', 'active')
     .order('created_at', { ascending: false })
 
+  const profile = await getProfile()
+
   return (
     <div className="min-h-screen bg-[#fffbf7]">
-      <header className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <Link href="/agent" className="text-2xl font-bold text-[#ff6b4a]">
-            realza
-          </Link>
-          <div className="flex items-center gap-4">
-            <Link href="/agent" className="text-gray-500 hover:text-gray-700">
-              Back to Dashboard
-            </Link>
-          </div>
-        </div>
-      </header>
+      <AgentHeader active="/agent/listings" userName={profile?.full_name} />
 
       <main className="max-w-6xl mx-auto px-6 py-8">
         <div className="mb-8">

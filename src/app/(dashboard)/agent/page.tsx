@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { AgentHeader } from '@/app/agent/_components/AgentHeader'
 import { getAgentShowings, getAvailableShowingsInMyArea } from '@/lib/actions/showings'
+import { getProfile } from '@/lib/actions/auth'
 
 export const runtime = 'nodejs'
 
@@ -34,10 +35,11 @@ export default async function AgentDashboard() {
 
   const { pendingBids, approvedShowings, error } = await getAgentShowings()
   const { groups: availableGroups } = await getAvailableShowingsInMyArea()
+  const profile = await getProfile()
 
   return (
     <div className="min-h-screen bg-[#fffbf7]">
-      <AgentHeader active="/agent" />
+      <AgentHeader active="/agent" userName={profile?.full_name} />
 
       <main className="max-w-6xl mx-auto px-6 py-8">
         <div className="mb-8">

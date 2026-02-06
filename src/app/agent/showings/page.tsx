@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { AgentHeader } from '@/app/agent/_components/AgentHeader'
 import { getAvailableShowingsInMyArea, updateAgentServiceArea } from '@/lib/actions/showings'
+import { getProfile } from '@/lib/actions/auth'
 
 export const runtime = 'nodejs'
 
@@ -62,10 +63,11 @@ export default async function AgentAvailableShowingsPage({
   }
 
   const { groups, serviceArea, error } = await getAvailableShowingsInMyArea()
+  const profile = await getProfile()
 
   return (
     <div className="min-h-screen bg-[#fffbf7]">
-      <AgentHeader active="/agent/showings" />
+      <AgentHeader active="/agent/showings" userName={profile?.full_name} />
 
       <main className="max-w-6xl mx-auto px-6 py-8">
         <div className="mb-8">

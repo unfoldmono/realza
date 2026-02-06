@@ -93,6 +93,14 @@ export default function NewListingClient() {
 
   const setValue = (key: keyof FormState, value: string | string[]) => {
     setForm((prev) => ({ ...prev, [key]: value } as FormState))
+    // Clear field error when user starts typing
+    if (fieldErrors[key as string]) {
+      setFieldErrors((prev) => {
+        const next = { ...prev }
+        delete next[key as string]
+        return next
+      })
+    }
   }
 
   const getAddressErrors = (): Record<string, string> => {

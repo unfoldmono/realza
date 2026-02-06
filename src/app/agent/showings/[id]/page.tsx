@@ -3,6 +3,7 @@ import { notFound, redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { AgentHeader } from '@/app/agent/_components/AgentHeader'
 import { claimShowing, getLockCode } from '@/lib/actions/showings'
+import { getProfile } from '@/lib/actions/auth'
 
 export const runtime = 'nodejs'
 
@@ -80,6 +81,7 @@ export default async function AgentShowingDetailPage({
 
   if (error || !showing) return notFound()
 
+  const profile = await getProfile()
   const listing: any = (showing as any).listing
   const photos: string[] = Array.isArray(listing?.photos) ? listing.photos : []
   const hero = photos[0]
@@ -117,7 +119,7 @@ export default async function AgentShowingDetailPage({
 
   return (
     <div className="min-h-screen bg-[#fffbf7]">
-      <AgentHeader active="/agent/showings" />
+      <AgentHeader active="/agent/showings" userName={profile?.full_name} />
 
       <main className="max-w-6xl mx-auto px-6 py-8">
         <div className="flex items-center justify-between gap-4 mb-6">

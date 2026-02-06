@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { AgentHeader } from '@/app/agent/_components/AgentHeader'
 import { getMyShowings } from '@/lib/actions/showings'
+import { getProfile } from '@/lib/actions/auth'
 
 export const runtime = 'nodejs'
 
@@ -46,6 +47,7 @@ export default async function AgentMyShowingsPage({
   }
 
   const { showings, error } = await getMyShowings()
+  const profile = await getProfile()
   const list = Array.isArray(showings) ? showings : []
 
   const upcoming = list.filter((s: any) => s.status !== 'cancelled' && !isPast(s.requested_date, s.requested_time))
@@ -55,7 +57,7 @@ export default async function AgentMyShowingsPage({
 
   return (
     <div className="min-h-screen bg-[#fffbf7]">
-      <AgentHeader active="/agent/my-showings" />
+      <AgentHeader active="/agent/my-showings" userName={profile?.full_name} />
 
       <main className="max-w-6xl mx-auto px-6 py-8">
         <div className="mb-8">
