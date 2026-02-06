@@ -297,27 +297,34 @@ export default function NewListingClient() {
 
     setSubmitting(true)
 
+    const listingData = {
+      address: form.address.trim(),
+      city: form.city.trim(),
+      state: form.state.trim().toUpperCase(),
+      zip: form.zip.trim(),
+      beds: Math.round(toNumber(form.beds)),
+      baths: toNumber(form.baths),
+      sqft: Math.round(toNumber(form.sqft)),
+      yearBuilt: form.yearBuilt.trim() ? Math.round(toNumber(form.yearBuilt)) : undefined,
+      description: form.description.trim(),
+      price: Math.round(toNumber(form.price)),
+      photos: form.photos,
+    }
+
+    console.log('Creating listing with data:', listingData)
+
     try {
-      const res = await createListing({
-        address: form.address.trim(),
-        city: form.city.trim(),
-        state: form.state.trim().toUpperCase(),
-        zip: form.zip.trim(),
-        beds: Math.round(toNumber(form.beds)),
-        baths: toNumber(form.baths),
-        sqft: Math.round(toNumber(form.sqft)),
-        yearBuilt: form.yearBuilt.trim() ? Math.round(toNumber(form.yearBuilt)) : undefined,
-        description: form.description.trim(),
-        price: Math.round(toNumber(form.price)),
-        photos: form.photos,
-      })
+      const res = await createListing(listingData)
+
+      console.log('Create listing response:', res)
 
       if (res?.error) throw new Error(res.error)
-      if (!res?.listing?.id) throw new Error('Failed to create listing.')
+      if (!res?.listing?.id) throw new Error('Failed to create listing - no ID returned.')
 
       router.push(`/listing/${res.listing.id}`)
       router.refresh()
     } catch (e: unknown) {
+      console.error('Listing creation error:', e)
       setError(e instanceof Error ? e.message : 'Something went wrong creating your listing.')
       setSubmitting(false)
     }
@@ -333,10 +340,10 @@ export default function NewListingClient() {
     <div className="min-h-screen bg-[#fffbf7]">
       <header className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="max-w-4xl mx-auto flex justify-between items-center">
-          <Link href="/seller" className="text-2xl font-bold text-[#ff6b4a]">
+          <Link href="/dashboard" className="text-2xl font-bold text-[#ff6b4a]">
             realza
           </Link>
-          <Link href="/seller" className="text-gray-500 hover:text-gray-700">
+          <Link href="/dashboard" className="text-gray-500 hover:text-gray-700">
             ✕ Cancel
           </Link>
         </div>

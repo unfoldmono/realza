@@ -28,7 +28,7 @@ export default async function MessagesInboxPage() {
     supabase.from('profiles').select('user_type').eq('id', user.id).single(),
   ])
 
-  const dashboardHref = myProfile?.user_type === 'agent' ? '/agent' : '/seller'
+  const dashboardHref = myProfile?.user_type === 'agent' ? '/agent' : '/dashboard'
 
   const grouped = new Map<string, typeof conversations>()
   for (const c of conversations ?? []) {

@@ -29,7 +29,7 @@ export default async function SettingsPage() {
             realza
           </Link>
           <Link
-            href={profile?.user_type === 'agent' ? '/agent' : '/seller'}
+            href={profile?.user_type === 'agent' ? '/agent' : '/dashboard'}
             className="text-gray-500 hover:text-gray-700"
           >
             ← Back to Dashboard

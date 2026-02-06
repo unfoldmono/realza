@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get('code')
-  const userType = searchParams.get('type') || 'seller'
+  const userType = searchParams.get('type') || 'user'
   const name = searchParams.get('name')
   const license = searchParams.get('license')
 
@@ -26,7 +26,7 @@ export async function GET(request: Request) {
           id: user.id,
           email: user.email!,
           full_name: decodeURIComponent(name),
-          user_type: userType as 'seller' | 'agent',
+          user_type: userType as 'user' | 'agent',
           license_number: license ? decodeURIComponent(license) : null,
         })
       }
@@ -38,7 +38,7 @@ export async function GET(request: Request) {
         .eq('id', user.id)
         .single()
 
-      const redirectPath = profile?.user_type === 'agent' ? '/agent' : '/seller'
+      const redirectPath = profile?.user_type === 'agent' ? '/agent' : '/dashboard'
       return NextResponse.redirect(`${origin}${redirectPath}`)
     }
   }

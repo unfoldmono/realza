@@ -1,4 +1,4 @@
-export type UserType = 'seller' | 'agent'
+export type UserType = 'user' | 'agent'
 
 export interface Profile {
   id: string
@@ -92,6 +92,12 @@ export interface Message {
   created_at: string
 }
 
+export interface SavedListing {
+  user_id: string
+  listing_id: string
+  created_at: string
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -124,6 +130,11 @@ export interface Database {
         Row: Message
         Insert: Omit<Message, 'id' | 'created_at'>
         Update: Partial<Omit<Message, 'id' | 'created_at'>>
+      }
+      saved_listings: {
+        Row: SavedListing
+        Insert: Omit<SavedListing, 'created_at'>
+        Update: never
       }
     }
   }

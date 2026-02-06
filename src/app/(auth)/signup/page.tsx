@@ -7,9 +7,9 @@ import { signUp } from "@/lib/actions/auth";
 
 function SignupForm() {
   const searchParams = useSearchParams();
-  const defaultType = searchParams.get("type") || "seller";
+  const defaultType = searchParams.get("type") || "user";
   
-  const [userType, setUserType] = useState<"seller" | "agent">(defaultType as "seller" | "agent");
+  const [userType, setUserType] = useState<"user" | "agent">(defaultType as "user" | "agent");
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [license, setLicense] = useState("");
@@ -70,14 +70,14 @@ function SignupForm() {
           <div className="flex gap-2 p-1 bg-gray-100 rounded-xl mb-8">
             <button
               type="button"
-              onClick={() => setUserType("seller")}
+              onClick={() => setUserType("user")}
               className={`flex-1 py-3 px-4 rounded-lg font-medium transition-all ${
-                userType === "seller"
+                userType === "user"
                   ? "bg-white text-[#ff6b4a] shadow-sm"
                   : "text-gray-600"
               }`}
             >
-              🏠 I'm Selling
+              🏡 I'm Buying / Selling
             </button>
             <button
               type="button"

@@ -20,8 +20,8 @@ async function ensureProfile(supabase: Awaited<ReturnType<typeof createClient>>,
     .upsert({
       id: user.id,
       email: user.email || '',
-      full_name: user.email?.split('@')[0] || 'Seller',
-      user_type: 'seller',
+      full_name: user.email?.split('@')[0] || 'User',
+      user_type: 'user',
     }, { onConflict: 'id' })
     .select()
     .single()

@@ -160,12 +160,20 @@ export default function AddressAutocomplete({
     )
   }
 
+  // Sync external value changes to input (for when address is auto-filled)
+  useEffect(() => {
+    if (inputRef.current && value && inputRef.current.value !== value) {
+      inputRef.current.value = value
+    }
+  }, [value])
+
   return (
     <input
       ref={inputRef}
       type="text"
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
+      defaultValue={value}
+      onInput={(e) => onChange((e.target as HTMLInputElement).value)}
+      onBlur={(e) => onChange(e.target.value)} // Also sync on blur
       placeholder={placeholder}
       className={`input ${error ? 'border-red-300 focus:border-red-400' : ''} ${className}`}
       autoComplete="off"

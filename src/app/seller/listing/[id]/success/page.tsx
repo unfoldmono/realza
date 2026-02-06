@@ -46,10 +46,10 @@ export default async function ListingPaymentSuccessPage({
     <div className="min-h-screen bg-[#fffbf7]">
       <header className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="max-w-4xl mx-auto flex justify-between items-center">
-          <Link href="/seller" className="text-2xl font-bold text-[#ff6b4a]">
+          <Link href="/dashboard" className="text-2xl font-bold text-[#ff6b4a]">
             realza
           </Link>
-          <Link href="/seller" className="text-gray-500 hover:text-gray-700">
+          <Link href="/dashboard" className="text-gray-500 hover:text-gray-700">
             Back to Dashboard
           </Link>
         </div>
@@ -78,10 +78,10 @@ export default async function ListingPaymentSuccessPage({
           </div>
 
           <div className="flex gap-3 justify-center">
-            <Link href="/seller" className="btn-primary">
+            <Link href="/dashboard" className="btn-primary">
               Go to Dashboard
             </Link>
-            <Link href="/seller/new" className="btn-secondary">
+            <Link href="/dashboard/new" className="btn-secondary">
               Create Another Listing
             </Link>
           </div>

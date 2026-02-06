@@ -11,7 +11,7 @@ export default async function NewSellerListingPage() {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect('/login?next=/seller/new')
+    redirect('/login?next=/dashboard/new')
   }
 
   const { data: profile } = await supabase
@@ -20,7 +20,7 @@ export default async function NewSellerListingPage() {
     .eq('id', user.id)
     .single()
 
-  if (profile?.user_type && profile.user_type !== 'seller') {
+  if (profile?.user_type === 'agent') {
     redirect('/agent')
   }
 

@@ -26,7 +26,7 @@ export async function signInWithEmail(email: string) {
 export async function signUp(data: {
   email: string
   name: string
-  userType: 'seller' | 'agent'
+  userType: 'user' | 'agent'
   licenseNumber?: string
 }) {
   const supabase = await createClient()
