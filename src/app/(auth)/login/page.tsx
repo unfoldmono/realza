@@ -59,7 +59,9 @@ export default function Login() {
 
           {error && (
             <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm">
-              {error}
+              {error.toLowerCase().includes('rate') 
+                ? "Too many login attempts. Please wait a few minutes before trying again."
+                : error}
             </div>
           )}
 
