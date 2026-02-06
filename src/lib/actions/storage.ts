@@ -39,22 +39,38 @@ export async function uploadPhoto(formData: FormData) {
 
   const fileName = `${user.id}/${globalThis.crypto?.randomUUID?.() ?? Date.now()}.${ext}`
 
-  const { data, error } = await supabase.storage.from('listing-photos').upload(fileName, file, {
-    cacheControl: '3600',
-    upsert: false,
-    contentType: file.type,
-  })
+  try {
+    const { data, error } = await supabase.storage.from('listing-photos').upload(fileName, file, {
+      cacheControl: '3600',
+      upsert: false,
+      contentType: file.type,
+    })
 
-  if (error) {
-    return { error: error.message }
+    if (error) {
+      // More helpful error messages
+      if (error.message.includes('Bucket not found')) {
+        return { error: 'Storage not configured. Please contact support.' }
+      }
+      if (error.message.includes('row-level security') || error.message.includes('policy')) {
+        return { error: 'Storage permissions error. Please contact support.' }
+      }
+      return { error: error.message }
+    }
+
+    if (!data?.path) {
+      return { error: 'Upload failed - no path returned' }
+    }
+
+    // Get public URL
+    const { data: { publicUrl } } = supabase.storage
+      .from('listing-photos')
+      .getPublicUrl(data.path)
+
+    return { url: publicUrl }
+  } catch (e) {
+    console.error('Photo upload error:', e)
+    return { error: 'Failed to upload photo. Please try again.' }
   }
-
-  // Get public URL
-  const { data: { publicUrl } } = supabase.storage
-    .from('listing-photos')
-    .getPublicUrl(data.path)
-
-  return { url: publicUrl }
 }
 
 export async function deletePhoto(url: string) {

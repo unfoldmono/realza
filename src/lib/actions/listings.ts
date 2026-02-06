@@ -3,6 +3,38 @@
 import { createClient } from '@/lib/supabase/server'
 import type { Listing } from '@/lib/types/database'
 
+async function ensureProfile(supabase: Awaited<ReturnType<typeof createClient>>, user: { id: string; email?: string }) {
+  // Check if profile exists
+  const { data: profile, error: fetchError } = await supabase
+    .from('profiles')
+    .select('id')
+    .eq('id', user.id)
+    .single()
+
+  if (profile) return { profile, error: null }
+
+  // Profile doesn't exist - create one
+  if (fetchError?.code === 'PGRST116') {
+    const { data: newProfile, error: insertError } = await supabase
+      .from('profiles')
+      .insert({
+        id: user.id,
+        email: user.email || '',
+        full_name: user.email?.split('@')[0] || 'Seller',
+        user_type: 'seller',
+      })
+      .select()
+      .single()
+
+    if (insertError) {
+      return { profile: null, error: `Failed to create profile: ${insertError.message}` }
+    }
+    return { profile: newProfile, error: null }
+  }
+
+  return { profile: null, error: fetchError?.message || 'Failed to verify profile' }
+}
+
 export async function createListing(data: {
   address: string
   city: string
@@ -22,6 +54,12 @@ export async function createListing(data: {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) {
     return { error: 'Not authenticated' }
+  }
+
+  // Ensure profile exists before creating listing
+  const { error: profileError } = await ensureProfile(supabase, user)
+  if (profileError) {
+    return { error: profileError }
   }
 
   const { data: listing, error } = await supabase
